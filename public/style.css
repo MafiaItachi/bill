@@ -1,6 +1,6 @@
 body {
   font-family: sans-serif;
-  background: #eef;
+  background: #E3E5D8;
   margin: 0;
   padding: 0;
 }
@@ -8,15 +8,15 @@ body {
 .container {
   max-width: 1000px;
   margin: auto;
-  background: white;
+  background: #E3E5D8;
   padding: 20px;
   border-radius: 10px;
 }
 
 h1 {
   text-align: center;
-  background: #1d4ed8;
-  color: white;
+  background: #355245;
+  color: #E3E5D8;
   padding: 10px;
   margin-top: 0;
 }
@@ -26,12 +26,14 @@ input {
   max-width: 80px;
   box-sizing: border-box;
   padding: 4px;
+  color: #101916;
 }
 td input{
   border: none;
 }
 .yellow-inputs input {
-  background-color: #fef08a;
+  background-color: #648374;
+  color:#E3E5D8;
 }
 
 table {
@@ -50,10 +52,7 @@ th, td {
 }
 
 .summary {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 10px;
+
   margin-top: 20px;
 }
 
@@ -68,14 +67,11 @@ button {
   font-size: 14px;
   cursor: pointer;
   border: none;
-  background-color: #2563eb;
+  background-color: #101916;
   color: white;
   transition: background 0.2s ease-in-out;
 }
 
-button:hover {
-  background-color: #1e40af;
-}
 
 /* 📱 Mobile Specific Adjustments */
 @media (max-width: 600px) {
@@ -89,6 +85,7 @@ button:hover {
 
   th, td {
     padding: 3px;
+    color: #101916;
   }
 
   button {
@@ -102,7 +99,7 @@ button:hover {
 }
 @media print {
   body {
-    background: white;
+    background: #E3E5D8;
   }
 
   .no-print {
@@ -130,6 +127,12 @@ button:hover {
 
   h1 {
     background: none;
-    color: black;
+    color: #101916;
   }
+}
+/* Add this if you're applying the class to a <td>, not just <input> */
+td.yellow-inputs {
+  background-color: #648374 !important;
+  color: #E3E5D8 !important;
+  font-weight: bold !important;
 }

@@ -67,12 +67,12 @@ function populateUI() {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${i + 1}</td>
-      <td><input value="${user.name}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'name', this.value)" /></td>
+      <td><input class="yellow-inputs"value="${user.name}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'name', this.value)" /></td>
       <td><input type="number" value="${user.water}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'water', this.value)" /></td>
       <td><input type="number" value="${user.new}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'new', this.value)" /></td>
       <td><input type="number" value="${user.old}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'old', this.value)" /></td>
       <td>${unitDiff}</td>
-      <td id="bill-${i}"></td>
+      <td id="bill-${i}"class="yellow-inputs"></td>
     `;
     tableBody.appendChild(row);
   });
@@ -95,9 +95,10 @@ function populateUI() {
     totalCollected += bill;
   });
 
-  document.getElementById("totalUsed").innerText = totalUnitDiff;
-  document.getElementById("totalCollected").innerText = totalCollected;
-  document.getElementById("extraCollected").innerText = meta.billAmount - totalCollected;
+  document.getElementById("totalUsed").value = totalUnitDiff;
+  document.getElementById("extraCollected").value = totalCollected +  data.meta.extraMoney - meta.billAmount;
+  document.getElementById("totalCollected").value = totalCollected + data.meta.extraMoney;
+
 }
 
 function updateField(index, key, value) {
@@ -164,7 +165,8 @@ function downloadPDF() {
     filename: `${month}_Electricity_Bill.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
   html2pdf().from(element).set(opt).save();

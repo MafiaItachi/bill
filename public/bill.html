@@ -38,10 +38,21 @@
     </table>
 
     <div class="summary">
-      <div>Extra Money Collected: <span id="extraCollected"></span></div>
-      <div>Total Unit Used by Rooms: <span id="totalUsed"></span></div>
-      <div>Total Collected: <span id="totalCollected"></span></div>
+      <label>
+        Extra Money Collected:
+        <input type="text" id="extraCollected" disabled />
+      </label>
+      <label>
+        Total Unit Used by Rooms:
+        <input type="text" id="totalUsed" disabled />
+      </label>
+      <label>
+        Total Collected:
+        <input type="text" id="totalCollected" disabled />
+      </label>
     </div>
+    
+    
 
     <div class="no-print">
       <button onclick="toggleEdit()" id="editBtn">Edit</button>
