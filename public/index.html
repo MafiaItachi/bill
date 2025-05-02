@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pappu Da Mess - Electricity Bills</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      padding-bottom: 80px;
+    }
+    h1 {
+      text-align: center;
+      background: #1d4ed8;
+      color: white;
+      padding: 10px;
+      margin-top: 0;
+    }
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .month-btn {
+      background-color: #b3b3b3;
+      color: rgb(0, 0, 0);
+      width: 100%;
+      padding: 20px 15px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .month-title {
+      font-weight:400;
+    }
+    .month-details {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .receipt-btn {
+      background-color: #f59e0b;
+      color: white;
+
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      margin-top: 10px;
+      margin-bottom: 5PX;
+    }
+    .receipt-btn:hover {
+      background-color: #d97706;
+    }
+
+    #addMonthBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #16a34a;
+      color: white;
+      border: none;
+      width: 200PX;
+      height: 60px;
+      font-size: 30px;
+      line-height: 0;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: 0.2s ease-in-out;
+    }
+
+    @media (max-width: 480px) {
+      .month-btn {
+        font-size: 18px;
+        padding: 25px 10px;
+      }
+      #addMonthBtn {
+        width: 180px;
+        height: 50px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>PAPPU DA MESS ELECTRICITY BILL</h1>
+  <div class="container">
+    <button class="receipt-btn" onclick="window.open('https://portal.wbsedcl.in/webdynpro/resources/wbsedcl/wbpaymentreceipt/ViewPaymentReceipt?payReceipt=Y#512116907')">
+      📄 Download Receipt
+    </button>
+
+    <h1>MESS MONTHLY BILL</h1>
+    <div class="month-list" id="monthsList">Loading...</div>
+  </div>
+
+  <button id="addMonthBtn" onclick="createNewMonth()">＋ ADD NEW BILL</button>
+
+  <script>
+    async function createNewMonth() {
+      const pass = prompt("Enter admin password:");
+      if (pass !== "ADMIN") {
+        alert("Wrong password");
+        return;
+      }
+  
+      const newMonth = prompt("Enter new month name (e.g., MAR - 25):");
+      if (!newMonth) return;
+  
+      window.location.href = `bill.html?month=${encodeURIComponent(newMonth)}&new=true`;
+    }
+  
+    async function loadMonths() {
+      try {
+        const res = await fetch('/all-months');
+        const data = await res.json();
+  
+        const container = document.getElementById('monthsList');
+        container.innerHTML = '';
+  
+        const monthKeys = Object.keys(data).reverse();
+  
+        monthKeys.forEach(month => {
+          const meta = data[month]?.meta;
+          const billAmount = meta?.billAmount ?? "N/A";
+          const totalUnit = meta?.totalUnit ?? "N/A";
+  
+          const btn = document.createElement('button');
+          btn.className = 'month-btn';
+          btn.onclick = () => {
+            window.location.href = `bill.html?month=${encodeURIComponent(month)}`;
+          };
+          console.log('Parsed month:', month, 'Meta:', meta);
+          btn.innerHTML = `
+            <div style="font-weight:bold;">${month}</div>
+            <div style="font-size: 14px;">₹${billAmount} / ${totalUnit} units</div>
+          `;
+          container.appendChild(btn);
+        });
+  
+      } catch (err) {
+        document.getElementById('monthsList').innerText = 'Failed to load months.';
+        console.error(err);
+      }
+    }
+  
+    loadMonths();
+  </script>
+  
+
+</body>
+</html>

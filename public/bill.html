@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pappu Da Mess Electricity Bill</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+<body>
+  <div class="container">
+    <h1>PAPPU DA MESS ELECTRICITY BILL</h1>
+    
+    <div class="top-inputs">
+      <div class="section yellow-inputs">
+        <label>Month: <input type="text" id="month" disabled /></label>
+        <label>Bill Amount: <input type="number" id="billAmount" disabled /></label>
+        <label>Total Unit: <input type="number" id="totalUnit" disabled /></label>
+        <label>Extra Money: <input type="number" id="extraMoney" disabled /></label>
+      </div>
+      <div class="section auto-calc">
+        <label>Rupees/Unit: <input type="text" id="rupeesPerUnit" disabled /></label>
+        <label>Unit for Water: <input type="text" id="unitForWater" disabled /></label>
+        <label>Members for Water: <input type="text" id="membersForWater" disabled /></label>
+        <label>Water/Head: <input type="text" id="waterHead" disabled /></label>
+      </div>
+    </div>
+
+    <table id="billTable">
+      <thead>
+        <tr>
+          <th>NO</th><th>NAME</th><th>MEMBERS FOR WATER</th>
+          <th>NEW UNIT</th><th>OLD UNIT</th><th>UNIT DIFFERENCE</th><th>BILL/ROOM</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="summary">
+      <div>Extra Money Collected: <span id="extraCollected"></span></div>
+      <div>Total Unit Used by Rooms: <span id="totalUsed"></span></div>
+      <div>Total Collected: <span id="totalCollected"></span></div>
+    </div>
+
+    <div class="no-print">
+      <button onclick="toggleEdit()" id="editBtn">Edit</button>
+      <button onclick="saveData()" id="saveBtn" style="display: none;">Save</button>
+      <button onclick="downloadPDF()">Send as PDF</button>
+    </div>
+    
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

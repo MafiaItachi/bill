@@ -1,0 +1,118 @@
+{
+  "JAN - 25": {
+    "meta": {
+      "month": "JAN - 25",
+      "billAmount": 2100,
+      "totalUnit": 355,
+      "extraMoney": 150
+    },
+    "users": [
+      {
+        "name": "SHUBHAM",
+        "water": 1,
+        "new": 3020,
+        "old": 2967
+      },
+      {
+        "name": "KUNAL",
+        "water": 2,
+        "new": 5448,
+        "old": 5424
+      },
+      {
+        "name": "RUPAM",
+        "water": 3,
+        "new": 4644,
+        "old": 4610
+      },
+      {
+        "name": "SABIR",
+        "water": 0,
+        "new": 3096,
+        "old": 3087
+      },
+      {
+        "name": "AAKASH",
+        "water": 2,
+        "new": 695,
+        "old": 670
+      },
+      {
+        "name": "SAMIR",
+        "water": 2,
+        "new": 6393,
+        "old": 6380
+      },
+      {
+        "name": "SUDIP",
+        "water": 0,
+        "new": 8006,
+        "old": 8002
+      },
+      {
+        "name": "ANGSHU",
+        "water": 1,
+        "new": 3992,
+        "old": 3964
+      }
+    ]
+  },
+  "FEB - 25": {
+    "meta": {
+      "month": "FEB - 25",
+      "billAmount": 1895,
+      "totalUnit": 341,
+      "extraMoney": 200
+    },
+    "users": [
+      {
+        "name": "SHUBHAM",
+        "water": 1,
+        "new": 3022,
+        "old": 2967
+      },
+      {
+        "name": "KUNAL",
+        "water": 2,
+        "new": 5448,
+        "old": 5424
+      },
+      {
+        "name": "RUPAM",
+        "water": 3,
+        "new": 4644,
+        "old": 4610
+      },
+      {
+        "name": "SABIR",
+        "water": 0,
+        "new": 3096,
+        "old": 3087
+      },
+      {
+        "name": "AAKASH",
+        "water": 2,
+        "new": 695,
+        "old": 670
+      },
+      {
+        "name": "SAMIR",
+        "water": 2,
+        "new": 6393,
+        "old": 6380
+      },
+      {
+        "name": "SUDIP",
+        "water": 0,
+        "new": 8006,
+        "old": 8002
+      },
+      {
+        "name": "ANGSHU",
+        "water": 1,
+        "new": 3992,
+        "old": 3964
+      }
+    ]
+  }
+}
