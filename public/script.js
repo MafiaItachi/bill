@@ -91,7 +91,7 @@ function populateUI() {
   data.users.forEach((user, i) => {
     const unitDiff = user.new - user.old;
     const bill = Math.round(unitDiff * rupeesPerUnit + user.water * waterHead);
-    document.getElementById(`bill-${i}`).innerText = bill;
+    document.getElementById(`bill-${i}`).innerText = `₹ ${bill}`;
     totalCollected += bill;
   });
 
