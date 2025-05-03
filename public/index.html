@@ -94,10 +94,11 @@
 <body>
 
   <h1>PAPPU DA MESS ELECTRICITY BILL</h1>
+
+  <button class="receipt-btn" onclick="openReceiptAndCopy()">
+    📄 Download Receipt
+  </button>
   <div class="container">
-    <button class="receipt-btn" onclick="window.open('https://portal.wbsedcl.in/webdynpro/resources/wbsedcl/wbpaymentreceipt/ViewPaymentReceipt?payReceipt=Y#')">
-      📄 Download Receipt
-    </button>
 
     <div class="messbill">MESS MONTHLY BILL</div>
     <div class="month-list" id="monthsList">Loading...</div>
@@ -106,6 +107,20 @@
   <button id="addMonthBtn" onclick="createNewMonth()">✚ ADD NEW BILL</button>
 
   <script>
+    function openReceiptAndCopy() {
+  // Open the receipt page
+  window.open('https://portal.wbsedcl.in/webdynpro/resources/wbsedcl/wbpaymentreceipt/ViewPaymentReceipt?payReceipt=Y#');
+
+  // Copy bill number to clipboard
+  const billNumber = "512116907";
+  navigator.clipboard.writeText(billNumber)
+    .then(() => {
+      alert("Bill number copied to clipboard: " + billNumber);
+    })
+    .catch(err => {
+      console.error("Clipboard copy failed:", err);
+    });
+}
     async function createNewMonth() {
       const pass = prompt("Enter admin password:");
       if (pass !== "ADMIN") {
