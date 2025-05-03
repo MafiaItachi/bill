@@ -71,6 +71,11 @@ button {
   color: white;
   transition: background 0.2s ease-in-out;
 }
+th.narrow-col, td:first-child {
+  width: 40px; /* adjust as needed */
+  min-width: 40px;
+  max-width: 40px;
+}
 
 
 /* 📱 Mobile Specific Adjustments */
@@ -135,4 +140,27 @@ td.yellow-inputs {
   background-color: #648374 !important;
   color: #E3E5D8 !important;
   font-weight: bold !important;
+  border: 1px solid #101916;
+}
+
+th.yellow-inputs {
+  background-color: #648374 !important;
+  color: #E3E5D8 !important;
+  font-weight: bold !important;
+  border: 1px solid #101916;
+}
+
+.yellow-name {
+  background-color: #648374 !important;
+  color: #E3E5D8 !important;
+  font-weight: bold;
+  border: 1px solid #101916;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+.yellow-names {
+  background-color: #648374 !important;
+  color: #E3E5D8 !important;
+  
 }
