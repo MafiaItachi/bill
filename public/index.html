@@ -161,39 +161,40 @@
     }
   
     async function loadMonths() {
-      try {
-        const res = await fetch('/all-months');
-        const data = await res.json();
-  
-        const container = document.getElementById('monthsList');
-        container.innerHTML = '';
-  
-        const monthKeys = Object.keys(data).reverse();
-  
-        monthKeys.forEach(month => {
-          const meta = data[month]?.meta;
-          const billAmount = meta?.billAmount ?? "N/A";
-          const totalUnit = meta?.totalUnit ?? "N/A";
-  
-          const btn = document.createElement('button');
-          btn.className = 'month-btn';
-          btn.onclick = () => {
-            window.location.href = `bill.html?month=${encodeURIComponent(month)}`;
-          };
-          console.log('Parsed month:', month, 'Meta:', meta);
-          btn.innerHTML = `
-            <div>🗓️ ${month}</div>
-            <div style="font-size: 14px;">₹${billAmount} / ${totalUnit} units</div>
-          `;
-          container.appendChild(btn);
-        });
-  
-      } catch (err) {
-        document.getElementById('monthsList').innerText = 'Failed to load months.';
-        console.error(err);
-      }
-    }
-  
+  try {
+    const res = await fetch('/all-months');
+    const data = await res.json();
+    console.log("Fetched month data:", data); // <-- Add this
+
+    const container = document.getElementById('monthsList');
+    container.innerHTML = '';
+
+    const monthKeys = Object.keys(data).reverse();
+
+    monthKeys.forEach(month => {
+      const meta = data[month];
+      const billAmount = meta?.billAmount ?? "N/A";
+      const totalUnit = meta?.totalUnit ?? "N/A";
+
+      const btn = document.createElement('button');
+      btn.className = 'month-btn';
+      btn.onclick = () => {
+        window.location.href = `bill.html?month=${encodeURIComponent(month)}`;
+      };
+
+      btn.innerHTML = `
+        <div>🗓️ ${month}</div>
+        <div style="font-size: 14px;">₹${billAmount} / ${totalUnit} units</div>
+      `;
+      container.appendChild(btn);
+    });
+
+  } catch (err) {
+    document.getElementById('monthsList').innerText = 'Failed to load months.';
+    console.error(err);
+  }
+}
+
     loadMonths();
   </script>
   
