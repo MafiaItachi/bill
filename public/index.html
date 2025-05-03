@@ -50,8 +50,8 @@
       color: #E3E5D8;
 
       width: 100%;
-      padding: 14px;
-      font-size: 20px;
+      padding: 10px;
+      font-size: 18px;
       margin-top: 10px;
       margin-bottom: 5PX;
     }
@@ -74,7 +74,7 @@
         padding: 30px 15px;
       }
       #addMonthBtn {
-        width: 180px;
+        width: 200px;
         height: 50px;
         font-size: 18px;
       }
@@ -88,15 +88,41 @@
       display: flex;
       justify-content: left;
     }
+    .id{
+      color: #101916;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .consumerId {
+      color: #101916;
+      display: flex;
+      align-items: center;
+    }
+    .consumerId input {
+      width: 150px;
+      text-align: center;
+      margin-left: 10px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #648374;
+      background-color: #E3E5D8;
+      color: #101916;
+      display: flex;
+    }
 
   </style>
 </head>
 <body>
 
   <h1>PAPPU DA MESS ELECTRICITY BILL</h1>
-
+  <div class="id">
+    <label class="consumerId">
+      COPY CONSUMER ID :
+      <input type="text" id="consumerId" value="512116907" disabled />
+    </label> </div>
   <button class="receipt-btn" onclick="openReceiptAndCopy()">
-    📄 Download Receipt
+    📜 DOWNLOAD RECEIPT
   </button>
   <div class="container">
 
@@ -104,7 +130,7 @@
     <div class="month-list" id="monthsList">Loading...</div>
   </div>
 
-  <button id="addMonthBtn" onclick="createNewMonth()">✚ ADD NEW BILL</button>
+  <button id="addMonthBtn" onclick="createNewMonth()">✚ ADD NEW BILL 💡</button>
 
   <script>
     function openReceiptAndCopy() {
@@ -156,7 +182,7 @@
           };
           console.log('Parsed month:', month, 'Meta:', meta);
           btn.innerHTML = `
-            <div style="font-weight:bold;">${month}</div>
+            <div>🗓️ ${month}</div>
             <div style="font-size: 14px;">₹${billAmount} / ${totalUnit} units</div>
           `;
           container.appendChild(btn);
