@@ -113,21 +113,32 @@ function updateField(index, key, value) {
   populateUI();
 }
 
-function toggleEdit() {
+async function toggleEdit() {
+  const editBtn = document.getElementById("editBtn");
+
   if (!editMode) {
     const pass = prompt("Enter password:");
     if (pass !== "ADMIN") {
       alert("Wrong password");
       return;
     }
-    document.getElementById("saveBtn").style.display = "inline-block";
-  } else {
-    document.getElementById("saveBtn").style.display = "none";
-  }
 
-  editMode = !editMode;
-  populateUI();
+    editMode = true;
+    document.getElementById("saveBtn").style.display = "inline-block";
+    editBtn.innerText = "Cancel Edit";
+    document.getElementById("download").style.display = "none";
+    populateUI();
+  } else {
+    // Cancel edit: disable edit mode, hide save button, reload data
+    editMode = false;
+    document.getElementById("saveBtn").style.display = "none";
+    editBtn.innerText = "Edit";
+
+    // Reload original data
+    await fetchData();
+  }
 }
+
 
 
 async function saveData() {
