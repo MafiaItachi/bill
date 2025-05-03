@@ -159,17 +159,31 @@ async function saveData() {
 function downloadPDF() {
   const month = document.getElementById("month").value || "bill";
 
-  const element = document.querySelector(".container");
+  // Clone the element
+  const element = document.querySelector(".container").cloneNode(true);
+  element.style.height = "10.3in"; // Limit to roughly 1 A4 page height
+  element.style.overflow = "hidden";
+
+  // Create a hidden wrapper to render the clone
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "fixed";
+  wrapper.style.top = "-9999px";
+  wrapper.appendChild(element);
+  document.body.appendChild(wrapper);
+
   const opt = {
     margin: 0.5,
     filename: `${month}_Electricity_Bill.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
+    html2canvas: { scale: 2, scrollY: 0 },
     jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
-  html2pdf().from(element).set(opt).save();
+  html2pdf().set(opt).from(element).save().then(() => {
+    document.body.removeChild(wrapper); // Clean up
+  });
 }
+
 
 fetchData();
