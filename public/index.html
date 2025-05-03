@@ -71,7 +71,7 @@
     @media (max-width: 480px) {
       .month-btn {
         font-size: 18px;
-        padding: 25px 10px;
+        padding: 30px 15px;
       }
       #addMonthBtn {
         width: 180px;
@@ -79,17 +79,27 @@
         font-size: 18px;
       }
     }
+    .messbill{
+      font-size: 25px;
+      font-weight: 500;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #101916;
+      display: flex;
+      justify-content: left;
+    }
+
   </style>
 </head>
 <body>
 
   <h1>PAPPU DA MESS ELECTRICITY BILL</h1>
   <div class="container">
-    <button class="receipt-btn" onclick="window.open('https://portal.wbsedcl.in/webdynpro/resources/wbsedcl/wbpaymentreceipt/ViewPaymentReceipt?payReceipt=Y#512116907')">
+    <button class="receipt-btn" onclick="window.open('https://portal.wbsedcl.in/webdynpro/resources/wbsedcl/wbpaymentreceipt/ViewPaymentReceipt?payReceipt=Y#')">
       📄 Download Receipt
     </button>
 
-    <h1>MESS MONTHLY BILL</h1>
+    <div class="messbill">MESS MONTHLY BILL</div>
     <div class="month-list" id="monthsList">Loading...</div>
   </div>
 
