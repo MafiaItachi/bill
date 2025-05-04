@@ -22,8 +22,8 @@
         padding-top: 12PX;
         font-family: "Poppins", sans-serif;
         font-size: 1.1em;
-        background-color: #F7F7F7;
-        color: #F7F7F7;
+        background-color: #E3E5D8; ;
+        color: #101916;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -32,15 +32,14 @@
       h1 {
         font-size: 1.8em;
         margin-bottom: 10px;
-        color: black;
+        color: #101916;
       }
       select {
         padding: 8px;
         font-size: 14px;
         background-color: #333;
-        color: #F7F7F7;
+        color: #101916;
         border: none;
-        border-radius: 6px;
         outline: none;
         cursor: pointer;
         width: 100%;
@@ -58,12 +57,13 @@
         text-align: center;
       }
       th {
-        background-color: #B5720D;
-        color: #F7F7F7;
+        background-color: #648374
+        ;
+        color: #E3E5D8;
         height: 10px;
       }
       tr:nth-child(even) {
-        background-color: #2a2a2a;
+        background-color: #AFC1B6;
       }
       tr:hover {
         background-color: #3a3a3a;
@@ -73,7 +73,6 @@
         width: 50px;
         height: 50px;
         object-fit: cover;
-        border-radius: 5px;
       }
       .editable,
       #kgInput,
@@ -83,7 +82,7 @@
         text-align: center;
         background: transparent;
         border: NONE;
-        color: #F7F7F7;
+        color: #101916;
         margin: 0;
         font-size: 1em;
         /* border-radius: 4px; */
@@ -94,10 +93,9 @@
         padding: 10px 16px;
         font-size: 16px;
         font-weight: bold;
-        color: #F7F7F7;
-        background-color: #B5720D;
+        color: #E3E5D8;
+        background-color: #648374 ;
         border: none;
-        border-radius: 6px;
         cursor: pointer;
         margin: 10px 5px;
       }
@@ -105,7 +103,7 @@
 
 
       .cal {
-        background-color: #854836;
+        background-color: #101916;
       }
 
 
@@ -139,7 +137,7 @@
 
         th,
         td {
-          padding: 6px 4px;
+          padding: 4px 4px;
           font-size: 0.9em;
           height: 42px;
           align-items: center;
@@ -167,7 +165,6 @@
 
           font-size: 1.2em;
           font-weight: bold;
-          border-radius: 4px;
           margin: 20px 4px 8px 4px;
           display: flex;
           justify-content: center;
@@ -177,7 +174,6 @@
         #MemberInput {
           font-size: 1.1em;
           font-weight: bold;
-          border-radius: 4px;
           font-family: "Poppins", sans-serif;
           padding: 0;
         }
@@ -189,23 +185,26 @@
         justify-content: space-around;
       }
       .tab button {
-        background-color: #F7F7F7;
+        background-color: #101916;
         color: #000000;
         margin: 0;
         border: none;
       }
-      .tab button.active {
-        background-color: #181818 ; /* Active tab color */
-        color: #F7F7F7;
-        border-radius: 10px 10px 0 0; /* Fully rounded */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
-      }
+      h1 {
+      text-align: center;
+      background: #355245;
+      color: #E3E5D8;
+      padding: 10px;
+      width: 96%;
+      margin-top: 0;
+    }
       .Veg,
       .NonVeg {
-        background-color: #181818 ;
+        background-color: #E3E5D8  ;
         width: 100%;
         border: none;
         margin: 0;
+        color: #101916 ;
       }
       .max {
         width: 153px;
@@ -485,7 +484,7 @@
     </div>
     <div style="margin: 20px auto; width: 90%; max-width: 600px; text-align: center;">
       <label for="commentBox" style="color: black; font-weight: bold;">Extra Items / Notes:</label><br />
-      <textarea id="commentBox" rows="3" placeholder="Write any extra items needed..." style="width: 100%; padding: 10px; font-size: 1em; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+      <textarea id="commentBox" rows="3" placeholder="Write any extra items needed..." style="width: 100%; padding: 10px; font-size: 1em; border: 1px solid #ccc;"></textarea>
     </div>
     
     <script>
@@ -585,7 +584,7 @@
           let option = document.createElement("div");
           option.textContent = unit;
           option.style = `
-            padding: 10px; cursor: pointer; color: #F7F7F7;
+            padding: 10px; cursor: pointer; color: #101916;
             background: ${currentUnit === unit ? "#444" : "transparent"};
             border-radius: 5px; margin-bottom: 5px;
           `;
