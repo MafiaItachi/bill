@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ingredient Index</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #E3E5D8;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #newBtn {
+      font-size: 17px;
+      background-color: #101916;
+      color: #E3E5D8;
+    }
+
+    #newBtn:hover {
+      background-color: #45a049;
+    }
+
+    #dateList {
+      list-style: none;
+      padding: 0;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    #dateList li {
+      background: white;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .dateText {
+      flex-grow: 1;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .deleteBtn {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0%;
+      width: 100%;
+      background: #648374;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row;
+      padding: 17px 0;
+      font-size: 18px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+    #newBtn {
+      position: fixed;
+      bottom: 90px;
+      right: 19px;
+      background-color: #101916;
+      color: #E3E5D8;
+      border: none;
+      width: 200PX;
+      height: 60px;
+      line-height: 0;
+    }
+
+    @media (max-width: 600px) {
+      #dateList li {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+
+      .navbar a {
+        padding: 6px 0;
+        font-size: 17px;
+      }
+
+      .deleteBtn {
+        margin-top: 5px;
+      }
+    }
+    h1 {
+      text-align: center;
+      background: #355245;
+      color: #E3E5D8;
+      padding: 10px;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>PAPPU DA MESS GROCERY LIST</h1>
+  <button id="newBtn">➕ NEW LIST 🛒</button>
+  <ul id="dateList"></ul>
+
+  <div class="navbar">
+    <a href="/index.html">🔌 BILL PAGE</a>
+    <a href="/index_ingredient.html">📝 GROCERY</a>
+  </div>
+
+  <script>
+    document.getElementById('newBtn').onclick = () => {
+      const today = new Date().toISOString().split('T')[0];
+      window.location.href = `ingredients.html?date=${today}&tab=NonVeg`;
+    };
+
+    function loadDates() {
+      fetch('/getDates')
+        .then(res => res.json())
+        .then(dates => {
+          const ul = document.getElementById('dateList');
+          ul.innerHTML = '';
+          dates.forEach(date => {
+            const li = document.createElement('li');
+
+            const span = document.createElement('span');
+            span.textContent = date;
+            span.className = 'dateText';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '❌';
+            deleteBtn.className = 'deleteBtn';
+
+            deleteBtn.onclick = (e) => {
+              e.stopPropagation();
+              if (confirm(`Delete ingredient list for ${date}?`)) {
+                fetch(`/deleteDate/${date}`, { method: 'DELETE' })
+                  .then(res => res.json())
+                  .then(() => {
+                    li.remove();
+                  })
+                  .catch(err => alert('Failed to delete: ' + err));
+              }
+            };
+
+            li.onclick = () => {
+              window.location.href = `ingredients.html?date=${date}&tab=NonVeg`;
+            };
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+            ul.appendChild(li);
+          });
+        })
+        .catch(err => console.error('Error loading dates:', err));
+    }
+
+    loadDates();
+  </script>
+</body>
+</html>

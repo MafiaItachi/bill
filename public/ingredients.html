@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="src/favicon.jpg" type="image/icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Ingredient Table</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        padding-top: 12PX;
+        font-family: "Poppins", sans-serif;
+        font-size: 1.1em;
+        background-color: #F7F7F7;
+        color: #F7F7F7;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+      h1 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+        color: black;
+      }
+      select {
+        padding: 8px;
+        font-size: 14px;
+        background-color: #333;
+        color: #F7F7F7;
+        border: none;
+        border-radius: 6px;
+        outline: none;
+        cursor: pointer;
+        width: 100%;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      th,
+      td {
+        font-family: "Poppins", sans-serif;
+        font-size: 1em;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: #B5720D;
+        color: #F7F7F7;
+        height: 10px;
+      }
+      tr:nth-child(even) {
+        background-color: #2a2a2a;
+      }
+      tr:hover {
+        background-color: #3a3a3a;
+        transition: 0.2s;
+      }
+      img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+      .editable,
+      #kgInput,
+      #MemberInput {
+        font-family: "Poppins", sans-serif;
+        width: 60px;
+        text-align: center;
+        background: transparent;
+        border: NONE;
+        color: #F7F7F7;
+        margin: 0;
+        font-size: 1em;
+        /* border-radius: 4px; */
+        /* padding: 2px; */
+      }
+      button {
+        font-family: "Poppins", sans-serif;
+        padding: 10px 16px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #F7F7F7;
+        background-color: #B5720D;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin: 10px 5px;
+      }
+
+
+
+      .cal {
+        background-color: #854836;
+      }
+
+
+
+      @media (max-width: 768px) {
+        body {
+          font-size: 1em;
+        }
+
+        .container {
+          width: 100%;
+        }
+
+        h1 {
+          font-size: 1.4em;
+        }
+
+        select,
+        input,
+        button {
+          font-size: 14px;
+          padding: 8px;
+          width: 100%;
+          margin-bottom: 8px;
+        }
+
+        table {
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+
+        th,
+        td {
+          padding: 6px 4px;
+          font-size: 0.9em;
+          height: 42px;
+          align-items: center;
+        }
+
+        img {
+          width: 40px;
+          height: 40px;
+        }
+
+        .btn {
+          display: flex;
+          /* flex-direction: column;
+        gap: 8px; */
+        }
+
+        button {
+          /* width: 100%; */
+          font-size: 14px;
+          padding: 12px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+
+        }
+        .input {
+
+          font-size: 1.2em;
+          font-weight: bold;
+          border-radius: 4px;
+          margin: 20px 4px 8px 4px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        #kgInput,
+        #MemberInput {
+          font-size: 1.1em;
+          font-weight: bold;
+          border-radius: 4px;
+          font-family: "Poppins", sans-serif;
+          padding: 0;
+        }
+      }
+      .tab {
+        display: flex;
+        flex-direction: row;
+        width: 95%;
+        justify-content: space-around;
+      }
+      .tab button {
+        background-color: #F7F7F7;
+        color: #000000;
+        margin: 0;
+        border: none;
+      }
+      .tab button.active {
+        background-color: #181818 ; /* Active tab color */
+        color: #F7F7F7;
+        border-radius: 10px 10px 0 0; /* Fully rounded */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
+      }
+      .Veg,
+      .NonVeg {
+        background-color: #181818 ;
+        width: 100%;
+        border: none;
+        margin: 0;
+      }
+      .max {
+        width: 153px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>INGREDIENT TABLE</h1>
+
+    <div style="display: none" class="Veg">
+      <div class="input">
+        <label for="kgInput">HOW MANY MEMBERS :</label>
+        <input
+          type="number"
+          id="MemberInput"
+          min="1"
+          step="1"
+          value="4"
+          onkeypress="if(event.key==='Enter'){updateTableVeg();}"
+        />
+      </div>
+      <div class="btn">
+          <button onclick="resetTable()">RESET</button>
+          <button id="toggleAll" onclick="toggleAll()">REMOVE ALL</button>
+          <button class="cal" onclick="updateTableVeg()">CALCULATE</button>
+
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>IMAGE</th>
+            <th class="max">ITEM</th>
+            <th>ACTION</th>
+            <th>QUANTITY</th>
+            <th>UNIT</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td><img src="src/potato.jpg" alt="Potato" /></td>
+            <td>POTATO</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="750" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/tomato.jpg" alt="Tomato" /></td>
+            <td>TOMATO</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="3" /></td>
+            <td class="unit">pcs</td>
+          </tr>
+          <tr>
+            <td><img src="src/onion.jpg" alt="Onion" /></td>
+            <td>ONION</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="250" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/rice.jpg" alt="Rice" /></td>
+            <td>RICE</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="680" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/dal.jpg" alt="Dal" /></td>
+            <td>DAL</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="100" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/ginger.jpg" alt="Ginger" /></td>
+            <td>GINGER</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/garlic.jpg" alt="Garlic" /></td>
+            <td>GARLIC</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="20" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/chili.jpg" alt="Chili" /></td>
+            <td>CHILLI</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="5" /></td>
+            <td class="unit">INR</td>
+          </tr>
+          <tr>
+            <td><img src="src/egg.jpg" alt="egg" /></td>
+            <td>EGG</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="4" /></td>
+            <td class="unit">pce</td>
+          </tr>
+          <tr>
+            <td><img src="src/oil.jpg" alt="Oil" /></td>
+            <td>OIL</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/salt.jpg" alt="Salt" /></td>
+            <td>SALT</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="NonVeg">
+      <div class="input">
+        <label for="kgInput">CHICKEN QUANTITY :</label>
+        <input
+          type="number"
+          id="kgInput"
+          min="0.1"
+          step="0.1"
+          value="1"
+          onkeypress="if(event.key==='Enter'){updateTable();}"
+        /> <label for="kgInput">KG</label>
+      </div>
+      <div class="btn">
+          <button onclick="resetTable()">RESET</button>
+          <button id="toggleAll" onclick="toggleAll()">REMOVE ALL</button>
+          <button class="cal" onclick="updateTable()">CALCULATE</button>
+
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>IMAGE</th>
+            <th>ITEM</th>
+            <th>ACTION</th>
+            <th id="kgHeader">QUANTITY</th>
+            <th>UNIT</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td><img src="src/chicken.jpg" alt="Chicken" /></td>
+            <td>CHICKEN</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1000" /></td>
+            <td class="unit">gm  </td>
+          </tr>
+          <tr>
+            <td><img src="src/potato.jpg" alt="Potato" /></td>
+            <td>POTATO</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="500" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/tomato.jpg" alt="Tomato" /></td>
+            <td>TOMATO</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="2" /></td>
+            <td class="unit">pcs</td>
+          </tr>
+          <tr>
+            <td><img src="src/onion.jpg" alt="Onion" /></td>
+            <td>ONION</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="250" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/rice.jpg" alt="Rice" /></td>
+            <td>RICE</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="680" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/dal.jpg" alt="Dal" /></td>
+            <td>DAL</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="100" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/ginger.jpg" alt="Ginger" /></td>
+            <td>GINGER</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/garlic.jpg" alt="Garlic" /></td>
+            <td>GARLIC</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="20" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/chili.jpg" alt="Chili" /></td>
+            <td>CHILLI</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="5" /></td>
+            <td class="unit">INR</td>
+          </tr>
+          <tr>
+            <td><img src="src/oil.jpg" alt="Oil" /></td>
+            <td>OIL</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+          </tr>
+          <tr>
+            <td><img src="src/jeera.jpg" alt="Jeera" /></td>
+            <td>JEERA POWDER</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/dhone.jpg" alt="Dhone" /></td>
+            <td>DHONE POWDER</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/turmeric.jpg" alt="Turmeric" /></td>
+            <td>TURMERIC POWDER</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/meat-masala.jpg" alt="Meat Masala" /></td>
+            <td>MEAT MASALA</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/garam-masala.jpg" alt="Garam Masala" /></td>
+            <td>GOROM MASALA</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili" /></td>
+            <td>KASHMERI CHILLI</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/dahi.jpg" alt="Dahi" /></td>
+            <td>DAHI</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+          <tr>
+            <td><img src="src/salt.jpg" alt="Salt" /></td>
+            <td>SALT</td>
+            <td class="action" data-state="add">✅</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin: 20px auto; width: 90%; max-width: 600px; text-align: center;">
+      <label for="commentBox" style="color: black; font-weight: bold;">Extra Items / Notes:</label><br />
+      <textarea id="commentBox" rows="3" placeholder="Write any extra items needed..." style="width: 100%; padding: 10px; font-size: 1em; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+    </div>
+    
+    <script>
+      // Focus selection
+      function selectKgInput() {
+        setTimeout(() => document.getElementById("kgInput").select(), 50);
+        setTimeout(() => document.getElementById("MemberInput").select(), 50);
+      }
+    
+      document.getElementById("kgInput").addEventListener("click", selectKgInput);
+      document.getElementById("kgInput").addEventListener("focus", selectKgInput);
+      document.getElementById("MemberInput").addEventListener("click", selectKgInput);
+      document.getElementById("MemberInput").addEventListener("focus", selectKgInput);
+    
+      function updateTable() {
+        let kg = parseFloat(document.getElementById("kgInput").value);
+        if (isNaN(kg) || kg <= 0) return;
+    
+        document.querySelectorAll(".editable").forEach(input => {
+          let baseValue = input.dataset.base || input.value;
+          input.dataset.base = baseValue;
+          let newValue = (baseValue * kg).toFixed(2).replace(/\.?0+$/, "");
+          input.value = newValue;
+        });
+    
+        saveIngredients(); // Save updated values
+      }
+    
+      function moveToNextInput(event) {
+        if (event.key === "Enter" || event.key === "Tab") {
+          event.preventDefault();
+          let inputs = Array.from(document.querySelectorAll(".editable"));
+          let currentIndex = inputs.indexOf(event.target);
+          let nextInput = inputs[(currentIndex + 1) % inputs.length];
+          nextInput.focus();
+          nextInput.select();
+        }
+      }
+    
+      function selectOnClick(event) {
+        event.target.select();
+      }
+    
+      function attachEditableListeners() {
+        document.querySelectorAll(".editable").forEach((input) => {
+          input.addEventListener("keydown", moveToNextInput);
+          input.addEventListener("click", selectOnClick);
+          input.addEventListener("focus", () => setTimeout(() => input.select(), 50));
+          input.addEventListener("input", saveIngredients);
+        });
+      }
+    
+      function toggleAction(element) {
+        element.dataset.state = element.dataset.state === "add" ? "remove" : "add";
+        element.textContent = element.dataset.state === "remove" ? "❌" : "✅";
+        saveIngredients();
+      }
+    
+      function attachActionListeners() {
+        document.querySelectorAll(".action").forEach((action) => {
+          action.addEventListener("click", function () {
+            toggleAction(this);
+          });
+        });
+      }
+    
+      function makeUnitEditable() {
+        document.querySelectorAll("td.unit").forEach((td) => {
+          td.addEventListener("click", function (event) {
+            showUnitMenu(td, event);
+          });
+        });
+      }
+    
+      function showUnitMenu(td) {
+        let currentUnit = td.textContent.trim();
+        let units = ["gm", "pcs", "pac", "INR"];
+    
+        let existingMenu = document.getElementById("unit-menu");
+        if (existingMenu) existingMenu.remove();
+    
+        let overlay = document.createElement("div");
+        overlay.id = "unit-menu";
+        overlay.style = `
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: rgba(0,0,0,0.8); display: flex; justify-content: center;
+          align-items: center; z-index: 1000;
+        `;
+    
+        let menu = document.createElement("div");
+        menu.style = `
+          background: black; border: 1px solid #ccc; border-radius: 10px;
+          padding: 20px; min-width: 200px; text-align: center;
+        `;
+    
+        units.forEach((unit) => {
+          let option = document.createElement("div");
+          option.textContent = unit;
+          option.style = `
+            padding: 10px; cursor: pointer; color: #F7F7F7;
+            background: ${currentUnit === unit ? "#444" : "transparent"};
+            border-radius: 5px; margin-bottom: 5px;
+          `;
+          option.addEventListener("click", function () {
+            td.textContent = unit;
+            overlay.remove();
+            saveIngredients();
+          });
+          menu.appendChild(option);
+        });
+    
+        overlay.addEventListener("click", function (event) {
+          if (event.target === overlay) overlay.remove();
+        });
+    
+        overlay.appendChild(menu);
+        document.body.appendChild(overlay);
+      }
+    
+      function switchTab(tab) {
+        const vegTab = document.querySelector(".Veg");
+        const nonVegTab = document.querySelector(".NonVeg");
+    
+        if (tab === "Veg") {
+          vegTab.style.display = "block";
+          nonVegTab.style.display = "none";
+        } else {
+          vegTab.style.display = "none";
+          nonVegTab.style.display = "block";
+        }
+      }
+    
+      function resetTable() {
+        document.querySelectorAll(".editable").forEach(input => {
+          input.value = input.dataset.base || input.dataset.default || input.value;
+        });
+    
+        document.querySelectorAll(".action").forEach(action => {
+          action.dataset.state = "add";
+          action.textContent = "✅";
+        });
+    
+        saveIngredients();
+      }
+    
+      function updateTableVeg() {
+        let members = parseInt(document.getElementById("MemberInput").value);
+        if (isNaN(members) || members <= 0) return;
+    
+        document.querySelectorAll(".Veg .editable").forEach(input => {
+          let baseValue = input.dataset.default || input.value;
+          input.dataset.default = baseValue;
+          let newValue = ((baseValue * members) / 4).toFixed(2).replace(/\.?0+$/, "");
+          input.value = newValue;
+        });
+    
+        saveIngredients();
+      }
+    
+      function getDateFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('date') || new Date().toISOString().split('T')[0];
+}
+
+// Updated saveIngredients with date
+function saveIngredients() {
+  const dateKey = getDateFromURL();
+  let data = {
+    kg: document.getElementById("kgInput").value,
+    members: document.getElementById("MemberInput").value,
+    values: Array.from(document.querySelectorAll(".editable")).map(i => i.value),
+    units: Array.from(document.querySelectorAll("td.unit")).map(td => td.textContent.trim()),
+    actions: Array.from(document.querySelectorAll(".action")).map(a => a.dataset.state),
+    comment: document.getElementById("commentBox")?.value || ""
+  };
+
+  fetch(`/saveIngredients?date=${dateKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).catch(err => console.error("Save error:", err));
+}
+       // Load ingredients from server based on current date
+       function loadIngredients() {
+  const dateKey = getDateFromURL();
+
+  fetch(`/getIngredients?date=${dateKey}`)
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to load ingredients");
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById("kgInput").value = data.kg || "";
+      document.getElementById("MemberInput").value = data.members || "";
+      document.getElementById("commentBox").value = data.comment || "";
+
+      let editableInputs = document.querySelectorAll(".editable");
+      data.values?.forEach((val, i) => {
+        if (editableInputs[i]) {
+          editableInputs[i].value = val;
+          editableInputs[i].dataset.base = val;
+          editableInputs[i].dataset.default = val;
+        }
+      });
+
+      let unitTds = document.querySelectorAll("td.unit");
+      data.units?.forEach((unit, i) => {
+        if (unitTds[i]) unitTds[i].textContent = unit;
+      });
+
+      let actionButtons = document.querySelectorAll(".action");
+      data.actions?.forEach((state, i) => {
+        if (actionButtons[i]) {
+          actionButtons[i].dataset.state = state;
+          actionButtons[i].textContent = state === "remove" ? "❌" : "✅";
+        }
+      });
+    })
+    .catch(err => {
+      console.error("Error loading ingredients:", err);
+    });
+}
+
+      window.onload = function () {
+        attachEditableListeners();
+        attachActionListeners();
+        makeUnitEditable();
+        loadIngredients(); // Load from server on page load
+        document.getElementById("commentBox").addEventListener("input", saveIngredients);
+      };
+    </script>
+    
+  </body>
+</html>

@@ -3,27 +3,34 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Dynamic port for hosting platforms
+const PORT = process.env.PORT || 3000;
 
-const dbPath = path.join(__dirname, "data.json");
+// Paths
+const DATA_JSON_PATH = path.join(__dirname, "data.json");
+const INGREDIENTS_JSON_PATH = path.join(__dirname, "ingredients.json");
 
-// Utility function to load fresh data from file
-function loadDB() {
-  return JSON.parse(fs.readFileSync(dbPath, "utf-8"));
+// Utility functions
+function loadJSON(filePath) {
+  if (!fs.existsSync(filePath)) return {};
+  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+}
+
+function saveJSON(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
 // Middleware
 app.use(express.json());
-app.use(express.static("public")); // Serve static files from 'public' folder
+app.use(express.static("public"));
 
-// Root route: serve index.html
+// Root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// List all months
+// ---------------------- BILL DATA ROUTES ----------------------
 app.get("/all-months", (req, res) => {
-  const db = loadDB();
+  const db = loadJSON(DATA_JSON_PATH);
   const months = {};
   for (let month in db) {
     months[month] = db[month].meta;
@@ -31,39 +38,80 @@ app.get("/all-months", (req, res) => {
   res.json(months);
 });
 
-// Serve data for a specific month
 app.get("/data", (req, res) => {
-  const db = loadDB();
+  const db = loadJSON(DATA_JSON_PATH);
   const month = req.query.month || "FEB";
   if (!db[month]) return res.status(404).send("Month not found");
   res.json(db[month]);
 });
 
-// Serve latest month
 app.get("/latest", (req, res) => {
-  const db = loadDB();
+  const db = loadJSON(DATA_JSON_PATH);
   const keys = Object.keys(db);
   if (keys.length === 0) return res.status(404).send("No data");
   const latestKey = keys[keys.length - 1];
   res.json(db[latestKey]);
 });
 
-// Save updated bill data
 app.post("/save", (req, res) => {
-  const db = loadDB();
+  const db = loadJSON(DATA_JSON_PATH);
   const { meta, users } = req.body;
   db[meta.month] = { meta, users };
-
-  fs.writeFile(dbPath, JSON.stringify(db, null, 2), (err) => {
-    if (err) {
-      console.error("Save error:", err);
-      return res.status(500).send("Failed to save data");
-    }
+  try {
+    saveJSON(DATA_JSON_PATH, db);
     res.sendStatus(200);
-  });
+  } catch (err) {
+    console.error("Save error:", err);
+    res.status(500).send("Failed to save data");
+  }
 });
 
-// Start the server
+// ---------------------- INGREDIENT ROUTES ----------------------
+
+// Get ingredient data for a date
+app.get("/getIngredients", (req, res) => {
+  const db = loadJSON(INGREDIENTS_JSON_PATH);
+  const date = req.query.date;
+  if (!date || !db[date]) return res.json({});
+  res.json(db[date]);
+});
+
+// Save ingredient data for a date
+app.post("/saveIngredients", (req, res) => {
+  const date = req.query.date;
+  if (!date) return res.status(400).send("Date required");
+  const db = loadJSON(INGREDIENTS_JSON_PATH);
+  db[date] = req.body;
+  try {
+    saveJSON(INGREDIENTS_JSON_PATH, db);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Save error:", err);
+    res.status(500).send("Failed to save ingredients");
+  }
+});
+
+// List all saved ingredient dates
+app.get("/getDates", (req, res) => {
+  const db = loadJSON(INGREDIENTS_JSON_PATH);
+  res.json(Object.keys(db).sort().reverse());
+});
+
+// Delete ingredient list for a specific date
+app.delete("/deleteIngredients", (req, res) => {
+  const date = req.query.date;
+  if (!date) return res.status(400).send("Date required");
+  const db = loadJSON(INGREDIENTS_JSON_PATH);
+  if (db[date]) {
+    delete db[date];
+    saveJSON(INGREDIENTS_JSON_PATH, db);
+    res.sendStatus(200);
+  } else {
+    res.status(404).send("Date not found");
+  }
+});
+
+// ---------------------- START SERVER ----------------------
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
