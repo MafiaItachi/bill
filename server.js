@@ -25,7 +25,7 @@ app.use(express.static("public"));
 
 // Root route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index_bill.html"));
 });
 
 // ---------------------- BILL DATA ROUTES ----------------------
