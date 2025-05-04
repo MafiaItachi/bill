@@ -130,53 +130,63 @@
   </div>
 
   <script>
-    document.getElementById('newBtn').onclick = () => {
-      const today = new Date().toISOString().split('T')[0];
-      window.location.href = `ingredients.html?date=${today}&tab=NonVeg`;
-    };
+document.getElementById('newBtn').onclick = () => {
+  const today = new Date().toISOString().split('T')[0];
+  window.location.href = `ingredients.html?date=${today}&tab=NonVeg`;
+};
 
-    function loadDates() {
-      fetch('/getDates')
-        .then(res => res.json())
-        .then(dates => {
-          const ul = document.getElementById('dateList');
-          ul.innerHTML = '';
-          dates.forEach(date => {
-            const li = document.createElement('li');
+function deleteDate(date) {
+  if (confirm(`Delete ingredient list for ${date}?`)) {
+    fetch(`/deleteIngredients?date=${encodeURIComponent(date)}`, {
+      method: "DELETE"
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to delete");
+        location.reload();
+      })
+      .catch(err => {
+        console.error("Failed to delete:", err);
+        alert("Error deleting data. Check console for details.");
+      });
+  }
+}
 
-            const span = document.createElement('span');
-            span.textContent = date;
-            span.className = 'dateText';
+function loadDates() {
+  fetch('/getDates')
+    .then(res => res.json())
+    .then(dates => {
+      const ul = document.getElementById('dateList');
+      ul.innerHTML = '';
+      dates.forEach(date => {
+        const li = document.createElement('li');
 
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '🗑️';
-            deleteBtn.className = 'deleteBtn';
+        const span = document.createElement('span');
+        span.textContent = date;
+        span.className = 'dateText';
 
-            deleteBtn.onclick = (e) => {
-              e.stopPropagation();
-              if (confirm(`Delete ingredient list for ${date}?`)) {
-                fetch(`/deleteDate/${date}`, { method: 'DELETE' })
-                  .then(res => res.json())
-                  .then(() => {
-                    li.remove();
-                  })
-                  .catch(err => alert('Failed to delete: ' + err));
-              }
-            };
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑️';
+        deleteBtn.className = 'deleteBtn';
 
-            li.onclick = () => {
-              window.location.href = `ingredients.html?date=${date}&tab=NonVeg`;
-            };
+        deleteBtn.onclick = (e) => {
+          e.stopPropagation();
+          deleteDate(date);  // Reuse the correct function
+        };
 
-            li.appendChild(span);
-            li.appendChild(deleteBtn);
-            ul.appendChild(li);
-          });
-        })
-        .catch(err => console.error('Error loading dates:', err));
-    }
+        li.onclick = () => {
+          window.location.href = `ingredients.html?date=${date}&tab=NonVeg`;
+        };
 
-    loadDates();
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+      });
+    })
+    .catch(err => console.error('Error loading dates:', err));
+}
+
+loadDates();
+
   </script>
 </body>
 </html>
