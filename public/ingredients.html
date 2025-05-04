@@ -673,7 +673,7 @@ function saveIngredients() {
       return response.json();
     })
     .then(data => {
-      document.getElementById("kgInput").value = data.kg || "";
+      document.getElementById("kgInput").value = data.kg || "1";
       document.getElementById("MemberInput").value = data.members || "";
       document.getElementById("commentBox").value = data.comment || "";
 

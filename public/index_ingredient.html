@@ -135,9 +135,15 @@
 
   <script>
 document.getElementById('newBtn').onclick = () => {
-  const today = new Date().toISOString().split('T')[0];
-  window.location.href = `ingredients.html?date=${today}&tab=NonVeg`;
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const dd = String(today.getDate()).padStart(2, '0');
+  const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+  window.location.href = `ingredients.html?date=${formattedDate}&tab=NonVeg`;
 };
+
 
 function deleteDate(date) {
   if (confirm(`Delete ingredient list for ${date}?`)) {
