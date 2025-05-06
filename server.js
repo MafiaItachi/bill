@@ -87,6 +87,21 @@ app.post("/save", async (req, res) => {
     res.status(500).send("Failed to save data");
   }
 });
+// Delete bill data for a month
+app.delete("/delete", async (req, res) => {
+  const month = req.query.month;
+  if (!month) return res.status(400).send("Month is required");
+  
+  try {
+    await db.ref("bills/" + month).remove();
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Error deleting month:", err);
+    res.status(500).send("Failed to delete");
+  }
+});
+
+
 
 // ---------------------- INGREDIENT ROUTES ----------------------
 
