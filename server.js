@@ -65,9 +65,20 @@ app.get("/latest", async (req, res) => {
     const data = snapshot.val();
     if (!data) return res.status(404).send("No data");
 
-    const keys = Object.keys(data).sort(); // Ensure consistent order
-    const latestKey = keys[keys.length - 1];
-    res.json(data[latestKey]);
+    let latestEntry = null;
+    let latestTimestamp = -Infinity;
+
+    for (const [monthKey, monthData] of Object.entries(data)) {
+      const ts = monthData.meta?.timestamp;
+      if (typeof ts === "number" && ts > latestTimestamp) {
+        latestTimestamp = ts;
+        latestEntry = monthData;
+      }
+    }
+
+    if (!latestEntry) return res.status(404).send("No valid timestamped data");
+
+    res.json(latestEntry);
   } catch (err) {
     console.error("Error fetching latest data:", err);
     res.status(500).send("Error fetching latest data");

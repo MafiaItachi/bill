@@ -10,8 +10,10 @@ async function fetchData() {
     try {
       const res = await fetch(`/latest`);
       if (!res.ok) throw new Error("No latest data");
-      const lastMonth = await res.json();
 
+      const lastMonth = await res.json(); // latest month by timestamp
+
+      // Set up data for the new month, using previous month's 'new' as current month's 'old'
       data = {
         meta: {
           month: monthParam,
@@ -21,16 +23,17 @@ async function fetchData() {
         },
         users: lastMonth.users.map(u => ({
           name: u.name,
-          new: 0,
           old: u.new,
+          new: 0,
           water: 0
         }))
       };
+
       document.getElementById("month").value = monthParam;
-
-
     } catch (err) {
-      const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "AAKASH","SAMIR", "SUDIP", "ANGSHU"];
+      console.warn("Falling back to default names:", err);
+
+      const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "AAKASH", "SAMIR", "SUDIP", "ANGSHU"];
       data = {
         meta: {
           month: monthParam,
@@ -40,8 +43,8 @@ async function fetchData() {
         },
         users: defaultNames.map(name => ({
           name,
-          new: 0,
           old: 0,
+          new: 0,
           water: 0
         }))
       };
@@ -53,15 +56,18 @@ async function fetchData() {
     return;
   }
 
+  // Existing month — load data directly
   const res = await fetch(`/data?month=${monthParam}`);
   if (!res.ok) {
     alert("Month not found!");
     return;
   }
+
   data = await res.json();
   populateUI();
 }
 
+//edit mode button functionality
 function toggleUIForEdit(enable) {
   editMode = enable;
   document.getElementById("saveBtn").style.display = enable ? "inline-block" : "none";
@@ -162,7 +168,7 @@ async function toggleEdit() {
     await fetchData(); // Re-fetch to discard changes
   }
 }
-
+//save button functionality
 async function saveData() {
   const meta = {
     month: document.getElementById("month").value,
@@ -199,7 +205,7 @@ async function saveData() {
     alert("Could not save data.");
   }
 }
-
+//edit mode buttons
 function disableEditMode() {
   // Disable all input elements
   const inputs = document.querySelectorAll("input, textarea, select");
@@ -218,7 +224,7 @@ function disableEditMode() {
   if (editableContainer) editableContainer.classList.remove("edit-mode");
 }
 
-
+//download as pdf
 function downloadPDF() {
   const month = document.getElementById("month").value || "bill";
 
