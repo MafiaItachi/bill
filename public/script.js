@@ -66,7 +66,7 @@ function toggleUIForEdit(enable) {
   editMode = enable;
   document.getElementById("saveBtn").style.display = enable ? "inline-block" : "none";
   document.getElementById("calculateBtn").style.display = enable ? "inline-block" : "none";
-  document.getElementById("editBtn").innerText = enable ? "Cancel Edit" : "Edit";
+  document.getElementById("editBtn").innerText = enable ? "⬅️ Cancel Edit" : "Edit";
   document.getElementById("download").style.display = enable ? "none" : "inline-block";
   document.getElementById("deleteBtn").style.display = enable ? "inline-block" : "none"; // 👈 Added
 }
