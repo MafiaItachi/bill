@@ -178,6 +178,16 @@ async function saveData() {
 
     if (res.ok) {
       alert("Data saved successfully!");
+
+      disableEditMode();
+
+      // Remove ?new=true from URL without reloading
+      const url = new URL(window.location);
+      url.searchParams.delete("new");
+      window.history.replaceState({}, document.title, url.toString());
+
+      // Reload page
+      window.location.reload();
     } else {
       throw new Error("Failed to save data.");
     }
@@ -186,6 +196,25 @@ async function saveData() {
     alert("Could not save data.");
   }
 }
+
+function disableEditMode() {
+  // Disable all input elements
+  const inputs = document.querySelectorAll("input, textarea, select");
+  inputs.forEach(input => input.disabled = true);
+
+  // Hide save button
+  const saveBtn = document.getElementById("saveBtn");
+  if (saveBtn) saveBtn.style.display = "none";
+
+  // Show edit button
+  const editBtn = document.getElementById("editBtn");
+  if (editBtn) editBtn.style.display = "inline-block";
+
+  // Optional: remove edit-mode class if you're using one
+  const editableContainer = document.getElementById("editableContainer");
+  if (editableContainer) editableContainer.classList.remove("edit-mode");
+}
+
 
 function downloadPDF() {
   const month = document.getElementById("month").value || "bill";
