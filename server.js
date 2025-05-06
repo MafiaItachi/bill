@@ -8,7 +8,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Firebase Admin SDK setup
-const serviceAccount = JSON.parse(process.env.FIREBASE_KEY.replace(/\\n/g, '\n'));
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_CONFIG_B64, "base64").toString("utf8")
+);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://pappu-mess-default-rtdb.firebaseio.com/" // Replace with your project’s actual DB URL
