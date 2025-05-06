@@ -26,6 +26,8 @@ async function fetchData() {
           water: 0
         }))
       };
+      document.getElementById("month").value = monthParam;
+
 
     } catch (err) {
       const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "AAKASH","SAMIR", "SUDIP", "ANGSHU"];
@@ -94,11 +96,11 @@ function populateUI() {
     row.innerHTML = `
       <td>${i + 1}</td>
       <td class="yellow-name">
-        <input class="yellow-names" value="${user.name}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'name', this.value)" />
+        <input class="yellow-names" value="${user.name}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="name" onchange="updateField(${i}, 'name', this.value)" />
       </td>
-      <td><input type="number" value="${user.water}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'water', this.value)" /></td>
-      <td><input type="number" value="${user.new}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'new', this.value)" /></td>
-      <td><input type="number" value="${user.old}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'old', this.value)" /></td>
+      <td><input type="number" value="${user.water}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="water" onchange="updateField(${i}, 'water', this.value)" /></td>
+      <td><input type="number" value="${user.new}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="new" onchange="updateField(${i}, 'new', this.value)" /></td>
+      <td><input type="number" value="${user.old}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="old" onchange="updateField(${i}, 'old', this.value)" /></td>
       <td>${unitDiff}</td>
       <td id="bill-${i}" class="yellow-inputs"></td>
     `;
@@ -242,6 +244,31 @@ function downloadPDF() {
     document.body.removeChild(wrapper);
   });
 }
+
+// Event listeners FOR SELECT THE INPUT FIELD
+document.addEventListener("focusin", (e) => {
+  if (editMode && e.target.tagName === "INPUT") {
+    e.target.select();
+  }
+});
+//this code is for tab clicking go column wise
+document.addEventListener("keydown", (e) => {
+  if (!editMode || e.key !== "Tab") return;
+
+  const active = document.activeElement;
+  if (active.tagName !== "INPUT" || !active.dataset.col) return;
+
+  e.preventDefault(); // Stop default horizontal tabbing
+
+  const row = parseInt(active.dataset.row);
+  const col = active.dataset.col;
+
+  const next = document.querySelector(`input[data-row="${row + 1}"][data-col="${col}"]`);
+  if (next) {
+    next.focus();
+  }
+});
+
 
 // Initial call
 fetchData();
