@@ -5,17 +5,13 @@ const urlParams = new URLSearchParams(window.location.search);
 const monthParam = urlParams.get("month");
 const isNew = urlParams.get("new") === "true";
 
-
-
 async function fetchData() {
   if (isNew) {
     try {
-      // Try to fetch last month's data
       const res = await fetch(`/latest`);
       if (!res.ok) throw new Error("No latest data");
       const lastMonth = await res.json();
 
-      // Prepare new month's data from last month
       data = {
         meta: {
           month: monthParam,
@@ -30,15 +26,8 @@ async function fetchData() {
           water: 0
         }))
       };
-        // ✅ Add this:
-  editMode = true;
-  document.getElementById("saveBtn").style.display = "inline-block";
-  document.getElementById("calculateBtn").style.display = "inline-block";
-  document.getElementById("editBtn").innerText = "Cancel Edit";
-  document.getElementById("download").style.display = "none";
 
     } catch (err) {
-      // Fallback to default names if last month is not available
       const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "SAMIR", "SUDIP", "ANGSHU"];
       data = {
         meta: {
@@ -57,11 +46,11 @@ async function fetchData() {
     }
 
     editMode = true;
+    toggleUIForEdit(true);
     populateUI();
     return;
   }
 
-  // Normal loading for existing months
   const res = await fetch(`/data?month=${monthParam}`);
   if (!res.ok) {
     alert("Month not found!");
@@ -71,23 +60,22 @@ async function fetchData() {
   populateUI();
 }
 
-document.addEventListener("keydown", function (event) {
-  if (editMode && event.key === "Enter") {
-    event.preventDefault(); // prevent default form submission or input jumping
-    document.getElementById("calculateBtn")?.click();
-  }
-});
-
-
-
+function toggleUIForEdit(enable) {
+  editMode = enable;
+  document.getElementById("saveBtn").style.display = enable ? "inline-block" : "none";
+  document.getElementById("calculateBtn").style.display = enable ? "inline-block" : "none";
+  document.getElementById("editBtn").innerText = enable ? "Cancel Edit" : "Edit";
+  document.getElementById("download").style.display = enable ? "none" : "inline-block";
+}
 
 function populateUI() {
   const meta = data.meta;
-
   const metaFields = ["month", "billAmount", "totalUnit", "extraMoney"];
   metaFields.forEach(id => {
     const el = document.getElementById(id);
-    el.value = meta[id];
+    if (!editMode) {
+      el.value = meta[id];
+    }
     el.disabled = !editMode;
   });
 
@@ -105,18 +93,25 @@ function populateUI() {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${i + 1}</td>
-      <td class="yellow-name"><input class="yellow-names" value="${user.name}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'name', this.value)" /></td>
+      <td class="yellow-name">
+        <input class="yellow-names" value="${user.name}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'name', this.value)" />
+      </td>
       <td><input type="number" value="${user.water}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'water', this.value)" /></td>
       <td><input type="number" value="${user.new}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'new', this.value)" /></td>
       <td><input type="number" value="${user.old}" ${!editMode ? "disabled" : ""} onchange="updateField(${i}, 'old', this.value)" /></td>
       <td>${unitDiff}</td>
-      <td id="bill-${i}"class="yellow-inputs"></td>
+      <td id="bill-${i}" class="yellow-inputs"></td>
     `;
     tableBody.appendChild(row);
   });
 
-  const rupeesPerUnit = +((meta.billAmount - meta.extraMoney) / meta.totalUnit).toFixed(1);
-  const unitForWater = meta.totalUnit - totalUnitDiff;
+  const liveBillAmount = +document.getElementById("billAmount").value || 0;
+  const liveExtraMoney = +document.getElementById("extraMoney").value || 0;
+  const liveTotalUnit = +document.getElementById("totalUnit").value || 0;
+  
+  const rupeesPerUnit = +((liveBillAmount - liveExtraMoney) / liveTotalUnit || 0).toFixed(1);
+  const unitForWater = liveTotalUnit - totalUnitDiff;
+  
   const waterHead = totalWaterMembers > 0 ? +((unitForWater * rupeesPerUnit) / totalWaterMembers).toFixed(2) : 0;
 
   document.getElementById("rupeesPerUnit").value = rupeesPerUnit;
@@ -125,7 +120,6 @@ function populateUI() {
   document.getElementById("waterHead").value = waterHead;
 
   let totalCollected = 0;
-
   data.users.forEach((user, i) => {
     const unitDiff = user.new - user.old;
     const bill = Math.round(unitDiff * rupeesPerUnit + user.water * waterHead);
@@ -134,9 +128,8 @@ function populateUI() {
   });
 
   document.getElementById("totalUsed").value = totalUnitDiff;
-  document.getElementById("extraCollected").value = totalCollected +  data.meta.extraMoney - meta.billAmount;
-  document.getElementById("totalCollected").value = totalCollected + data.meta.extraMoney;
-
+  document.getElementById("extraCollected").value = totalCollected + meta.extraMoney - meta.billAmount;
+  document.getElementById("totalCollected").value = totalCollected + meta.extraMoney;
 }
 
 function updateField(index, key, value) {
@@ -148,35 +141,24 @@ function updateField(index, key, value) {
       data.users[index][key] = parsed;
     }
   }
+  // Just update the table and calculations — don’t overwrite meta
   populateUI();
 }
 
 async function toggleEdit() {
-  const editBtn = document.getElementById("editBtn");
-
   if (!editMode) {
     const pass = prompt("Enter password:");
     if (pass !== "ADMIN") {
       alert("Wrong password");
       return;
     }
-
-    editMode = true;
-    document.getElementById("saveBtn").style.display = "inline-block";
-    document.getElementById("calculateBtn").style.display = "inline-block";  // 👈 Show calculate button
-    editBtn.innerText = "Cancel Edit";
-    document.getElementById("download").style.display = "none";
+    toggleUIForEdit(true);
     populateUI();
   } else {
-    editMode = false;
-    document.getElementById("saveBtn").style.display = "none";
-    document.getElementById("calculateBtn").style.display = "none";  // 👈 Hide calculate button
-    editBtn.innerText = "Edit";
-    await fetchData(); // Reload original data
+    toggleUIForEdit(false);
+    await fetchData(); // Re-fetch to discard changes
   }
 }
-
-
 
 async function saveData() {
   const meta = {
@@ -207,12 +189,10 @@ async function saveData() {
 function downloadPDF() {
   const month = document.getElementById("month").value || "bill";
 
-  // Clone the element
   const element = document.querySelector(".container").cloneNode(true);
-  element.style.height = "10.3in"; // Limit to roughly 1 A4 page height
+  element.style.height = "10.3in";
   element.style.overflow = "hidden";
 
-  // Create a hidden wrapper to render the clone
   const wrapper = document.createElement("div");
   wrapper.style.position = "fixed";
   wrapper.style.top = "-9999px";
@@ -229,9 +209,9 @@ function downloadPDF() {
   };
 
   html2pdf().set(opt).from(element).save().then(() => {
-    document.body.removeChild(wrapper); // Clean up
+    document.body.removeChild(wrapper);
   });
 }
 
-
+// Initial call
 fetchData();
