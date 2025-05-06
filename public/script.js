@@ -68,6 +68,7 @@ function toggleUIForEdit(enable) {
   document.getElementById("calculateBtn").style.display = enable ? "inline-block" : "none";
   document.getElementById("editBtn").innerText = enable ? "Cancel Edit" : "Edit";
   document.getElementById("download").style.display = enable ? "none" : "inline-block";
+  document.getElementById("deleteBtn").style.display = enable ? "inline-block" : "none"; // 👈 Added
 }
 
 function populateUI() {
@@ -268,6 +269,26 @@ document.addEventListener("keydown", (e) => {
     next.focus();
   }
 });
+
+//DELETE BUTTON FUNCTIONALITY
+async function deleteMonth() {
+  const month = document.getElementById("month").value;
+  if (!month || !confirm(`Are you sure you want to delete data for "${month}"?`)) return;
+
+  try {
+    const res = await fetch(`/delete?month=${encodeURIComponent(month)}`, { method: "DELETE" });
+    if (res.ok) {
+      alert(`Month "${month}" deleted successfully.`);
+      window.location.href = "index.html"; // Redirect to month list page
+    } else {
+      throw new Error("Failed to delete month.");
+    }
+  } catch (err) {
+    console.error("Delete error:", err);
+    alert("Could not delete month.");
+  }
+}
+
 
 
 // Initial call
