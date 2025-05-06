@@ -216,15 +216,17 @@
   try {
     const res = await fetch('/all-months');
     const data = await res.json();
-    console.log("Fetched month data:", data); // <-- Add this
+    console.log("Fetched month data:", data);
 
     const container = document.getElementById('monthsList');
     container.innerHTML = '';
 
-    const monthKeys = Object.keys(data).reverse();
+    // Convert to array and sort by timestamp descending
+    const sortedEntries = Object.entries(data).sort(([, a], [, b]) => {
+      return (b.timestamp || 0) - (a.timestamp || 0);
+    });
 
-    monthKeys.forEach(month => {
-      const meta = data[month];
+    sortedEntries.forEach(([month, meta]) => {
       const billAmount = meta?.billAmount ?? "N/A";
       const totalUnit = meta?.totalUnit ?? "N/A";
 
@@ -246,6 +248,7 @@
     console.error(err);
   }
 }
+
 
     loadMonths();
   </script>

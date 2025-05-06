@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const serviceAccount = JSON.parse(
   Buffer.from(process.env.FIREBASE_CONFIG_B64, "base64").toString("utf8")
 );
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://pappu-mess-default-rtdb.firebaseio.com/" // Replace with your project’s actual DB URL
@@ -76,6 +77,9 @@ app.post("/save", async (req, res) => {
   if (!meta || !meta.month) return res.status(400).send("Missing month in meta");
 
   try {
+    // Add a timestamp to the meta object
+    meta.timestamp = Date.now();
+
     await db.ref("bills/" + meta.month).set({ meta, users });
     res.sendStatus(200);
   } catch (err) {

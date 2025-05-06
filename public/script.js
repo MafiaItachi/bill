@@ -28,7 +28,7 @@ async function fetchData() {
       };
 
     } catch (err) {
-      const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "SAMIR", "SUDIP", "ANGSHU"];
+      const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "AAKASH","SAMIR", "SUDIP", "ANGSHU"];
       data = {
         meta: {
           month: monthParam,
@@ -166,6 +166,7 @@ async function saveData() {
     billAmount: +document.getElementById("billAmount").value,
     totalUnit: +document.getElementById("totalUnit").value,
     extraMoney: +document.getElementById("extraMoney").value,
+    timestamp: Date.now() // <-- Add timestamp in milliseconds
   };
 
   try {
