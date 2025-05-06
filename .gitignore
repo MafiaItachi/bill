@@ -2,4 +2,4 @@
 node_modules/
 data.json
 ingredients.json
-firebase.json
+firebasekey.json

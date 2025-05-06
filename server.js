@@ -11,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 const serviceAccount = JSON.parse(
   Buffer.from(process.env.FIREBASE_CONFIG_B64, "base64").toString("utf8")
 );
+// Firebase Admin SDK setup
+//const serviceAccount = require("./firebaseKey.json");
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
