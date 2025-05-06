@@ -5,27 +5,57 @@ const urlParams = new URLSearchParams(window.location.search);
 const monthParam = urlParams.get("month");
 const isNew = urlParams.get("new") === "true";
 
+
+
 async function fetchData() {
   if (isNew) {
-    // Get last month's data
-    const res = await fetch(`/latest`);
-    const lastMonth = await res.json();
+    try {
+      // Try to fetch last month's data
+      const res = await fetch(`/latest`);
+      if (!res.ok) throw new Error("No latest data");
+      const lastMonth = await res.json();
 
-    // Prepare new month's data
-    data = {
-      meta: {
-        month: monthParam,
-        billAmount: 0,
-        totalUnit: 0,
-        extraMoney: 0,
-      },
-      users: lastMonth.users.map(u => ({
-        name: u.name,
-        new: 0,
-        old: u.new,
-        water: 0
-      }))
-    };
+      // Prepare new month's data from last month
+      data = {
+        meta: {
+          month: monthParam,
+          billAmount: 0,
+          totalUnit: 0,
+          extraMoney: 0,
+        },
+        users: lastMonth.users.map(u => ({
+          name: u.name,
+          new: 0,
+          old: u.new,
+          water: 0
+        }))
+      };
+        // ✅ Add this:
+  editMode = true;
+  document.getElementById("saveBtn").style.display = "inline-block";
+  document.getElementById("calculateBtn").style.display = "inline-block";
+  document.getElementById("editBtn").innerText = "Cancel Edit";
+  document.getElementById("download").style.display = "none";
+
+    } catch (err) {
+      // Fallback to default names if last month is not available
+      const defaultNames = ["SHUBHAM", "KUNAL", "RUPAM", "SABIR", "SAMIR", "SUDIP", "ANGSHU"];
+      data = {
+        meta: {
+          month: monthParam,
+          billAmount: 0,
+          totalUnit: 0,
+          extraMoney: 0,
+        },
+        users: defaultNames.map(name => ({
+          name,
+          new: 0,
+          old: 0,
+          water: 0
+        }))
+      };
+    }
+
     editMode = true;
     populateUI();
     return;
@@ -40,6 +70,14 @@ async function fetchData() {
   data = await res.json();
   populateUI();
 }
+
+document.addEventListener("keydown", function (event) {
+  if (editMode && event.key === "Enter") {
+    event.preventDefault(); // prevent default form submission or input jumping
+    document.getElementById("calculateBtn")?.click();
+  }
+});
+
 
 
 
@@ -125,17 +163,16 @@ async function toggleEdit() {
 
     editMode = true;
     document.getElementById("saveBtn").style.display = "inline-block";
+    document.getElementById("calculateBtn").style.display = "inline-block";  // 👈 Show calculate button
     editBtn.innerText = "Cancel Edit";
     document.getElementById("download").style.display = "none";
     populateUI();
   } else {
-    // Cancel edit: disable edit mode, hide save button, reload data
     editMode = false;
     document.getElementById("saveBtn").style.display = "none";
+    document.getElementById("calculateBtn").style.display = "none";  // 👈 Hide calculate button
     editBtn.innerText = "Edit";
-
-    // Reload original data
-    await fetchData();
+    await fetchData(); // Reload original data
   }
 }
 

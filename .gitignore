@@ -1,11 +1,4 @@
+
 node_modules/
-postcss.config.js
-package.json
-package-lock.json
-tailwind.config.js
-APPS/
-tailwind/
-transfer/
 data.json
 ingredients.json
-.gitignore
