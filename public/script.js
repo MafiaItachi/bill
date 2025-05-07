@@ -105,7 +105,12 @@ function populateUI() {
       <td class="yellow-name">
         <input class="yellow-names" value="${user.name}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="name" onchange="updateField(${i}, 'name', this.value)" />
       </td>
-      <td><input type="number" value="${user.water}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="water" onchange="updateField(${i}, 'water', this.value)" /></td>
+<td>
+  <input type="number" step="any" inputmode="decimal" value="${user.water}" 
+    ${!editMode ? "disabled" : ""}  
+    data-row="${i}" data-col="water" 
+    onchange="updateField(${i}, 'water', this.value)" />
+</td>
       <td><input type="number" value="${user.new}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="new" onchange="updateField(${i}, 'new', this.value)" /></td>
       <td><input type="number" value="${user.old}" ${!editMode ? "disabled" : ""}  data-row="${i}" data-col="old" onchange="updateField(${i}, 'old', this.value)" /></td>
       <td>${unitDiff}</td>
@@ -145,7 +150,7 @@ function updateField(index, key, value) {
   if (key === "name") {
     data.users[index][key] = value.trim();
   } else {
-    const parsed = parseInt(value);
+    const parsed = parseFloat(value);
     if (!isNaN(parsed)) {
       data.users[index][key] = parsed;
     }
